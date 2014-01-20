@@ -30,7 +30,7 @@ define KernelPackage/fast-classifier
   DEPENDS:=+kmod-shortcut-fe
   TITLE:=Kernel driver for FAST Classifier
   FILES:=$(PKG_BUILD_DIR)/fast-classifier/fast-classifier.ko
-  KCONFIG:=CONFIG_NF_CONNTRACK_EVENTS=y
+  KCONFIG:=CONFIG_NF_CONNTRACK_CHAIN_EVENTS=y
   AUTOLOAD:=$(call AutoLoad,51,fast-classifier)
 endef
 
