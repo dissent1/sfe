@@ -1,5 +1,8 @@
 #
-# Copyright (c) 2013 Qualcomm Atheros, Inc..
+# Copyright (c) 2014 Qualcomm Atheros, Inc.
+#
+# All Rights Reserved.
+# Qualcomm Atheros Confidential and Proprietary.
 #
 
 include $(TOPDIR)/rules.mk
