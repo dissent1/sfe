@@ -32,6 +32,7 @@ define KernelPackage/shortcut-fe
   DEPENDS:=
   TITLE:=Kernel driver for SFE
   FILES:=$(PKG_BUILD_DIR)/shortcut-fe/shortcut-fe.ko
+  KCONFIG:=CONFIG_NF_CONNTRACK_EVENTS=y
   AUTOLOAD:=$(call AutoLoad,50,shortcut-fe)
 endef
 
@@ -46,7 +47,7 @@ define KernelPackage/shortcut-fe-cm
   DEPENDS:=+kmod-shortcut-fe
   TITLE:=Kernel driver for SFE
   FILES:=$(PKG_BUILD_DIR)/shortcut-fe/shortcut-fe-cm.ko
-  KCONFIG:=CONFIG_NF_CONNTRACK_EVENTS=y
+  KCONFIG:=CONFIG_NF_CONNTRACK_CHAIN_EVENTS=y
   AUTOLOAD:=$(call AutoLoad,51,shortcut-fe-cm)
 endef
 
