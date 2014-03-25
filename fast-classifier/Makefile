@@ -26,7 +26,7 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
 
-define KernelPackage/fast-classifier
+define KernelPackage/$(PKG_NAME)/Default
   SECTION:=kernel
   CATEGORY:=Kernel modules
   SUBMENU:=Network Support
@@ -34,11 +34,30 @@ define KernelPackage/fast-classifier
   TITLE:=Kernel driver for FAST Classifier
   FILES:=$(PKG_BUILD_DIR)/fast-classifier/fast-classifier.ko
   KCONFIG:=CONFIG_NF_CONNTRACK_CHAIN_EVENTS=y
+  PROVIDES:=$(PKG_NAME)
+endef
+
+define KernelPackage/$(PKG_NAME)
+  $(call KernelPackage/$(PKG_NAME)/Default)
   AUTOLOAD:=$(call AutoLoad,51,fast-classifier)
 endef
 
-define KernelPackage/fast-classifier/Description
+define KernelPackage/$(PKG_NAME)-noload
+  $(call KernelPackage/$(PKG_NAME)/Default)
+endef
+
+define KernelPackage/$(PKG_NAME)/Default/description
 FAST Classifier talks to SFE to make decisions about offloading connections
+endef
+
+define KernelPackage/$(PKG_NAME)/description
+$(call KernelPackage/$(PKG_NAME)/Default/description)
+endef
+
+define KernelPackage/$(PKG_NAME)-noload/description
+$(call KernelPackage/$(PKG_NAME)/Default/description)
+
+This package does not load $(PKG_NAME) at boot by default
 endef
 
 define Package/fast-classifier-example
@@ -78,5 +97,6 @@ define Package/fast-classifier-example/install
 	$(CP) $(PKG_BUILD_DIR)/userspace_fast_classifier $(1)/sbin/
 endef
 
-$(eval $(call KernelPackage,fast-classifier))
+$(eval $(call KernelPackage,$(PKG_NAME)))
+$(eval $(call KernelPackage,$(PKG_NAME)-noload))
 $(eval $(call BuildPackage,fast-classifier-example))
