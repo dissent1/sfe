@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+
+START=68
+
+have_nss() {
+	[ -n "$(cat /proc/cpuinfo | grep DB149)" ] && echo 1 && return
+	[ -n "$(cat /proc/cpuinfo | grep AP145)" ] && echo 1 && return
+	[ -n "$(cat /proc/cpuinfo | grep AP148)" ] && echo 1 && return
+
+	echo 0
+}
+
+load_sfe() {
+	local kernel_version=$(uname -r)
+
+	[ -e "/lib/modules/$kernel_version/shortcut-fe.ko" ] || return
+	[ -e "/lib/modules/$kernel_version/shortcut-fe-cm.ko" ] || return
+	insmod /lib/modules/$kernel_version/shortcut-fe.ko
+	insmod /lib/modules/$kernel_version/shortcut-fe-cm.ko
+}
+
+start() {
+	[ "$(have_nss)" = "1" ] || load_sfe
+}
+
+stop() {
+	[ -n "$(lsmod|grep shortcut_fe_cm)" ] && rmmod shortcut_fe_cm
+	[ -n "$(lsmod|grep shortcut_fe)" ] && rmmod shortcut_fe
+}

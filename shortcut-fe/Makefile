@@ -33,7 +33,6 @@ define KernelPackage/shortcut-fe
   TITLE:=Kernel driver for SFE
   FILES:=$(PKG_BUILD_DIR)/shortcut-fe/shortcut-fe.ko
   KCONFIG:=CONFIG_NF_CONNTRACK_EVENTS=y
-  AUTOLOAD:=$(call AutoLoad,50,shortcut-fe)
 endef
 
 define KernelPackage/shortcut-fe/Description
@@ -48,7 +47,6 @@ define KernelPackage/shortcut-fe-cm
   TITLE:=Kernel driver for SFE
   FILES:=$(PKG_BUILD_DIR)/shortcut-fe/shortcut-fe-cm.ko
   KCONFIG:=CONFIG_NF_CONNTRACK_CHAIN_EVENTS=y
-  AUTOLOAD:=$(call AutoLoad,51,shortcut-fe-cm)
 endef
 
 define KernelPackage/shortcut-fe-cm/Description
@@ -62,6 +60,11 @@ define Build/Compile
 		SUBDIRS="$(PKG_BUILD_DIR)/shortcut-fe" \
 		EXTRA_CFLAGS="$(EXTRA_CFLAGS)" \
 		modules
+endef
+
+define KernelPackage/shortcut-fe-cm/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/etc/init.d/shortcut-fe $(1)/etc/init.d
 endef
 
 $(eval $(call KernelPackage,shortcut-fe))
