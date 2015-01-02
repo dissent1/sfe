@@ -15,9 +15,14 @@ load_sfe() {
 	local kernel_version=$(uname -r)
 
 	[ -e "/lib/modules/$kernel_version/shortcut-fe.ko" ] || return
-	[ -e "/lib/modules/$kernel_version/shortcut-fe-cm.ko" ] || return
-	insmod /lib/modules/$kernel_version/shortcut-fe.ko
-	insmod /lib/modules/$kernel_version/shortcut-fe-cm.ko
+	[ -e "/lib/modules/$kernel_version/shortcut-fe-cm.ko" ] && {
+		insmod /lib/modules/$kernel_version/shortcut-fe.ko
+		insmod /lib/modules/$kernel_version/shortcut-fe-cm.ko
+	}
+	[ -e "/lib/modules/$kernel_version/fast-classifier.ko" ] && {
+		insmod /lib/modules/$kernel_version/shortcut-fe.ko
+		insmod /lib/modules/$kernel_version/fast-classifier.ko
+	}
 }
 
 start() {
@@ -27,4 +32,5 @@ start() {
 stop() {
 	[ -n "$(lsmod|grep shortcut_fe_cm)" ] && rmmod shortcut_fe_cm
 	[ -n "$(lsmod|grep shortcut_fe)" ] && rmmod shortcut_fe
+	[ -n "$(lsmod|grep fast_classifier)" ] && rmmod fast_classifier
 }
