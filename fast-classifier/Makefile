@@ -39,7 +39,6 @@ endef
 
 define KernelPackage/$(PKG_NAME)
   $(call KernelPackage/$(PKG_NAME)/Default)
-  AUTOLOAD:=$(call AutoLoad,51,fast-classifier)
 endef
 
 define KernelPackage/$(PKG_NAME)-noload
