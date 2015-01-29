@@ -67,5 +67,10 @@ define Build/Compile
 		modules
 endef
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include/shortcut-fe
+	$(CP) -rf $(PKG_BUILD_DIR)/shortcut-fe/sfe.h $(1)/usr/include/shortcut-fe
+endef
+
 $(eval $(call KernelPackage,shortcut-fe))
 $(eval $(call KernelPackage,shortcut-fe-cm))
