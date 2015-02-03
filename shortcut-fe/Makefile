@@ -33,6 +33,7 @@ define KernelPackage/shortcut-fe
   TITLE:=Kernel driver for SFE
   FILES:=$(PKG_BUILD_DIR)/shortcut-fe/shortcut-fe.ko
   KCONFIG:=CONFIG_NF_CONNTRACK_EVENTS=y
+  AUTOLOAD:=$(call AutoLoad,09,shortcut-fe)
 endef
 
 define KernelPackage/shortcut-fe/Description
