@@ -1,18 +1,22 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2014-2015 Qualcomm Atheros, Inc
 
-START=68
+#SFE connection manager has a lower priority, it should be started after other connection manager
+#to detect the existence of connection manager with higher priority
+START=72
 
-have_nss() {
-	[ -n "$(cat /proc/cpuinfo | grep DB149)" ] && echo 1 && return
-	[ -n "$(cat /proc/cpuinfo | grep AP145)" ] && echo 1 && return
-	[ -n "$(cat /proc/cpuinfo | grep AP148)" ] && echo 1 && return
+have_cm() {
+	[ -d "/sys/kernel/debug/ecm" ] && echo 1 && return
 
 	echo 0
 }
 
-load_sfe() {
+#load shortcut-fe connection manager
+load_sfe_cm() {
 	local kernel_version=$(uname -r)
+
+	#shortcut-fe-drv.ko is not needed because other connection manager is not enabled
+	[ -d "/sys/module/shortcut_fe_drv" ] && rmmod shortcut_fe_drv
 
 	[ -e "/lib/modules/$kernel_version/shortcut-fe-cm.ko" ] && {
 		[ -d /sys/module/shortcut_fe_cm ] || insmod /lib/modules/$kernel_version/shortcut-fe-cm.ko
@@ -23,7 +27,7 @@ load_sfe() {
 }
 
 start() {
-	[ "$(have_nss)" = "1" ] || load_sfe
+	[ "$(have_cm)" = "1" ] || load_sfe_cm
 }
 
 stop() {
