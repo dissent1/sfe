@@ -79,10 +79,12 @@ define Build/Compile
 		modules
 endef
 
+ifneq ($(CONFIG_PACKAGE_kmod-shortcut-fe)$(CONFIG_PACKAGE_kmod-shortcut-fe-cm),)
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/shortcut-fe
 	$(CP) -rf $(PKG_BUILD_DIR)/shortcut-fe/sfe.h $(1)/usr/include/shortcut-fe
 endef
+endif
 
 $(eval $(call KernelPackage,shortcut-fe))
 $(eval $(call KernelPackage,shortcut-fe-cm))
