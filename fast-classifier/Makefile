@@ -67,7 +67,7 @@ endef
 
 define Package/fast-classifier-example
   TITLE:=Example user space program for fast-classifier
-  DEPENDS:=+libnl-bf +libfast-classifier
+  DEPENDS:=+libnl +libfast-classifier
 endef
 
 define Package/fast-classifier-example/description
@@ -75,7 +75,7 @@ Example user space program that communicates with fast
 classifier kernel module
 endef
 
-define Build/Compile
+define Build/Compile/kmod
 	$(MAKE) -C "$(LINUX_DIR)" \
 		CONFIG_FAST_CLASSIFIER=m \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
@@ -83,12 +83,19 @@ define Build/Compile
 		SUBDIRS="$(PKG_BUILD_DIR)/fast-classifier" \
 		EXTRA_CFLAGS="$(EXTRA_CFLAGS)" \
 		modules
+endef
 
+define Build/Compile/example
 	$(TARGET_CC) -o $(PKG_BUILD_DIR)/userspace_fast_classifier \
 		-I $(PKG_BUILD_DIR)/fast-classifier \
-		-I$(STAGING_DIR)/usr/include/libnl3 \
+		-I$(STAGING_DIR)/usr/include/libnl \
 		-lnl-genl-3 -lnl-3 \
 		$(PKG_BUILD_DIR)/fast-classifier/userspace_example.c
+endef
+
+define Build/Compile
+	$(Build/Compile/kmod)
+	$(if $(CONFIG_PACKAGE_fast-classifier-example),$(Build/Compile/example))
 endef
 
 define Build/InstallDev
