@@ -78,6 +78,7 @@ define Build/Compile/example
 	$(TARGET_CC) -o $(PKG_BUILD_DIR)/userspace_fast_classifier \
 		-I $(PKG_BUILD_DIR)/fast-classifier \
 		-I$(STAGING_DIR)/usr/include/libnl \
+		-I$(STAGING_DIR)/usr/include/libnl3 \
 		-lnl-genl-3 -lnl-3 \
 		$(PKG_BUILD_DIR)/fast-classifier/nl_classifier_test.c
 endef
